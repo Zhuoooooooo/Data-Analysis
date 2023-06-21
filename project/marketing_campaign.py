@@ -92,8 +92,35 @@ rfm.head()
 
  #定義顧客族群#
 S = {
-    'Type': ['A', 'B', 'C', 'D', 'E', 'F', 'I', 'J', 'K'],
-    'Describe': ['頻率高消費高', '頻率高消費中', '頻率高消費低', '頻率中消費高', '頻率中消費中', '頻率中消費低'\
-                , '頻率低消費高', '頻率低消費中', '頻率低消費低']
+    'Type': ['High-Value Customers', 'Mid-Value Customers', 'Low-Value Customers'\
+             , 'Potential-Value Customers', 'At Risk', 'New Customers'],
+    
+    'Describe': ['Bought recently/Buy often/Spend the most', 'Bought sometime back/Buy average-frequency/Spend average'\
+                 , 'Bought long time ago/Buy seldom/Spend little', 'Recent customers with average frequency'\
+                 , 'Purchased often but a long time ago', 'Bought most recently/not often']
 }
 Segment = pd.DataFrame(S)
+Segment
+
+ #分群#
+def segfunc():
+    slist = []
+    for i in rfm['RFM_Score']:
+        if (i[0] == '1' or i[0] == '2') and (i[1] == '1' or i[1] == '2'):
+            slist.append('High-Value Customers')
+        elif (i[0] == '4' or i[0] == '5') and (i[1] == '4' or i[1] == '5'):
+            slist.append('Low-Value Customers')
+        elif (i[0] == '2' or i[0] == '3') and (i[1] == '4' or i[1] == '5'):
+            slist.append('Potential-Value Customers')
+        elif (i[0] == '4' or i[0] == '5') and (i[1] == '1' or i[1] == '2' or i[1] == '3'):
+            slist.append('At Risk')
+        elif (i[0] == '1') and (i[1] == '4' or i[1] == '5'):
+            slist.append('New Customers')
+        else:
+            slist.append('Mid-Value Customers')
+    return slist
+
+rfm['Segment'] = pd.DataFrame(segfunc())
+rfm.head(n=10)
+
+rfm['Segment'].value_counts().plot(kind='pie', ylabel=' ', autopct='%1.0f%%', explode=[0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
