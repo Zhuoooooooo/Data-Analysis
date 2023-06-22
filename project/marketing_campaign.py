@@ -14,8 +14,8 @@ print('- pandas {}'.format(pd.__version__))
 pd.set_option('display.max_columns', None)
 pd.set_option('display.max_rows', None)
 
-df = pd.read_csv("D:\Data science\kaggle_dataset\marketing_campaign\marketing_campaign.csv", sep="\t")
-print('Number of records:',df.shape[0])
+df = pd.read_csv("D:\Data science\kaggle_dataset\marketing_campaign\marketing_campaign.csv", sep = "\t")
+print('Number of records of the dataset:',df.shape[0])
 df.head()
 
 df.info()
@@ -66,6 +66,14 @@ odd = df_cleaned[df_cleaned['Age'] >= 95]
 odd.head()
 df_final = df_cleaned[df_cleaned['Age'] <= 95]
 df_final.shape
+
+#客戶概況#
+print('Average Order:', df_final['Total_Order'].sum())
+print('Average Spent:', df_final['Total_Spent'].sum())
+print('Average Age:', (df_final['Age'].sum()/df_final.shape[0]))
+print('Average Income:', (df_final['Income'].sum()/df_final.shape[0]))
+print('Average Family Size:', (df_final['Family_Size'].sum()/df_final.shape[0]))
+print('Average Registration Year:', (df_final['Registration_Year'].sum()/df_final.shape[0]))
 
 ### RFM
 #挑選有消費的會員
@@ -123,4 +131,47 @@ def segfunc():
 rfm['Segment'] = pd.DataFrame(segfunc())
 rfm.head(n=10)
 
-rfm['Segment'].value_counts().plot(kind='pie', ylabel=' ', autopct='%1.0f%%', explode=[0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
+#作圖
+Segment_count = rfm['Segment'].value_counts()
+
+def make_autopct(Segment_count):
+    def my_autopct(pct):
+        total = sum(Segment_count)
+        val = int(round(pct*total/100.0))
+        return '{p:.2f}%  ({v:d})'.format(p=pct,v=val)
+    return my_autopct
+
+Segment_count.plot(kind='pie',title = 'Customer Segments', figsize = [8,8], ylabel=' ', autopct=make_autopct(Segment_count), explode=[0.05, 0.05, 0.05, 0.05, 0.05, 0.05])
+
+#分組比較#
+C_RFM = df_final.copy()
+C_RFM['Segment'] = rfm['Segment']
+C_RFM.head()
+
+Seg_avg_Age = C_RFM.groupby('Segment')['Age'].mean()
+Seg_avg_Regis = C_RFM.groupby('Segment')['Registration_Year'].mean()
+Seg_avg_Income = C_RFM.groupby('Segment')['Income'].mean()
+Seg_avg_Children = C_RFM.groupby('Segment')['Children'].mean()
+Seg_avg_Familysize = C_RFM.groupby('Segment')['Family_Size'].mean()
+Seg_avg_Recency = C_RFM.groupby('Segment')['Day_since_last_shopping'].mean()
+Seg_avg_Freq = C_RFM.groupby('Segment')['Total_Order'].mean()
+Seg_avg_Spent = C_RFM.groupby('Segment')['Total_Spent'].mean()
+
+
+a = Seg_avg_Age.plot(kind='bar', xlabel='Segment', ylabel='Average Age', title='Comparison of Average Age by Segment',color=['red', 'green', 'blue', 'orange', 'black', 'pink'])
+plt.show()
+b = Seg_avg_Regis.plot(kind='bar', xlabel='Segment', ylabel='Average Regis', title='Comparison of Average Regis by Segment', color = ['red', 'green', 'blue', 'orange', 'black', 'pink'])
+plt.show()
+c = Seg_avg_Income.plot(kind='bar', xlabel='Segment', ylabel='Average Income', title='Comparison of Average Income by Segment', color = ['red', 'green', 'blue', 'orange', 'black', 'pink'])
+plt.show()
+d = Seg_avg_Children.plot(kind='bar', xlabel='Segment', ylabel='Average Children', title='Comparison of Average Children by Segment', color = ['red', 'green', 'blue', 'orange', 'black', 'pink'])
+plt.show()
+e = Seg_avg_Familysize.plot(kind='bar', xlabel='Segment', ylabel='Average Familysize', title='Comparison of Average Familysize by Segment', color = ['red', 'green', 'blue', 'orange', 'black', 'pink'])
+plt.show()
+f = Seg_avg_Recency.plot(kind='bar', xlabel='Segment', ylabel='Average Recency', title='Comparison of Average Recency by Segment', color = ['red', 'green', 'blue', 'orange', 'black', 'pink'])
+plt.show()
+g = Seg_avg_Freq.plot(kind='bar', xlabel='Segment', ylabel='Average Freq', title='Comparison of Average Freq by Segment', color = ['red', 'green', 'blue', 'orange', 'black', 'pink'])
+plt.show()
+h = Seg_avg_Spent.plot(kind='bar', xlabel='Segment', ylabel='Average Spent', title='Comparison of Average Spent by Segment', color = ['red', 'green', 'blue', 'orange', 'black', 'pink'])
+plt.show()
+
