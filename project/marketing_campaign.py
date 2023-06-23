@@ -28,43 +28,45 @@ print('Categories in:', df['Education'].value_counts(), '\n')
 print('Categories in:', df['Marital_Status'].value_counts())
 
 ## Data cleaning & preprocessing
-df_dedu = df[~df.Income.isnull()]
-print('Number of records of the dataset:', df_dedu.shape[0])
-df_d = df_dedu.copy()
+df_c = df[~df.Income.isnull()]
+print('Number of records of the dataset:', df_c.shape[0])
+df_cl = df_c.copy()
 
+
+datayear = datetime.date(2014,12,31)
 def year():
-    regis_year = pd.to_datetime(df_dedu['Dt_Customer'], format = '%d-%m-%Y').apply(lambda x: x.year)
-    current_year = datetime.datetime.now().year
-    return current_year - regis_year
+    regis_year = pd.to_datetime(df_cl['Dt_Customer'], format = '%d-%m-%Y').apply(lambda x: x.year)
+    return datayear.year - regis_year
 def byear():
-    birth_year = df_dedu['Year_Birth']
-    current_year = datetime.datetime.now().year
-    return current_year - birth_year
+    birth_year = df_cl['Year_Birth']
+    return datayear.year - birth_year
 
-df_d['Dt_Customer'] = year()
-df_d['Year_Birth'] = byear()
+df_cl['Dt_Customer'] = year()
+df_cl['Year_Birth'] = byear()
 
 
-df_d2 = df_d.rename(columns={'Year_Birth':'Age','Dt_Customer':'Registration_Year','Recency':'Day_since_last_shopping',
+df_cl2 = df_cl.rename(columns={'Year_Birth':'Age','Dt_Customer':'Registration_Year','Recency':'Day_since_last_shopping',
              'MntWines':'Wines', 'MntFruits':'Fruits','MntMeatProducts':'Meat','MntFishProducts':'Fish',
              'MntSweetProducts':'Sweet','MntGoldProds':'Gold'})
-df_d2['Total_Spent'] = df_d2['Wines'] + df_d2['Fruits'] + df_d2['Meat'] + df_d2['Fish'] + df_d2['Sweet'] + df_d2['Gold']
-df_d2['Total_Order'] = df_d2['NumDealsPurchases'] + df_d2['NumWebPurchases'] + df_d2['NumCatalogPurchases']\
-                       + df_d2['NumStorePurchases'] + df_d2['NumWebVisitsMonth']
-df_d2.head()
+df_cl2['Total_Spent'] = df_cl2['Wines'] + df_cl2['Fruits'] + df_cl2['Meat'] + df_cl2['Fish'] + df_cl2['Sweet'] + df_cl2['Gold']
+df_cl2['Total_Order'] = df_cl2['NumDealsPurchases'] + df_cl2['NumWebPurchases'] + df_cl2['NumCatalogPurchases']\
+                       + df_cl2['NumStorePurchases'] + df_cl2['NumWebVisitsMonth']
+df_cl2.head()
 
 
-df_d2['Children'] = df_d2['Kidhome'] + df_d2['Teenhome']
-df_d2['Family_Size'] = df_d2['Marital_Status'].replace({'Single':1, 'Divorced':1, 'Widow':1, 'Alone':1,
-                                                        'Absurd':1, 'YOLO':1, 'Married':2, 'Together':2}) + df_d2['Children']
+df_cl2['Children'] = df_cl2['Kidhome'] + df_cl2['Teenhome']
+df_cl2['Family_Size'] = df_cl2['Marital_Status'].replace({'Single':1, 'Divorced':1, 'Widow':1, 'Alone':1,
+                                                        'Absurd':1, 'YOLO':1, 'Married':2, 'Together':2}) + df_cl2['Children']
   
-df_cleaned = df_d2[['ID', 'Age', 'Education', 'Marital_Status', 'Income', 'Children', 'Registration_Year'\
-    , 'Day_since_last_shopping', 'Total_Spent','Total_Order']]
+df_cleaned = df_cl2[['ID', 'Age', 'Education', 'Marital_Status', 'Income', 'Children','Family_Size', 'Registration_Year', 'Day_since_last_shopping'\
+                    , 'Total_Spent','Total_Order']]
 df_cleaned.describe()
 
 odd = df_cleaned[df_cleaned['Age'] >= 95]
 odd.head()
 df_final = df_cleaned[df_cleaned['Age'] <= 95]
+
+df_final = df_final.reset_index(drop=True)
 df_final.shape
 
 #客戶概況#
@@ -91,9 +93,9 @@ sns.displot(rfm['Frequency'])
 sns.displot(rfm['Monetary'])
  #數據峰度高，因此不直接使用qcut()函式，先進行rank#
  
-rfm['Recency_Score'] = pd.cut(rfm['Recency'].rank(method = 'first'), 5, labels = [1, 2, 3, 4, 5]) #5很久沒來
-rfm['Frequency_Score'] = pd.cut(rfm['Frequency'].rank(method = 'first'), 5, labels = [5, 4, 3, 2, 1]) #1很常來
-rfm['Monetary_Score'] = pd.cut(rfm['Monetary'].rank(method = 'first'), 5, labels = [5, 4, 3, 2, 1]) #1花很多錢
+rfm['Recency_Score'] = pd.qcut(rfm['Recency'], 5, labels = [1, 2, 3, 4, 5]) #5很久沒來
+rfm['Frequency_Score'] = pd.qcut(rfm['Frequency'], 5, labels = [5, 4, 3, 2, 1]) #1很常來
+rfm['Monetary_Score'] = pd.qcut(rfm['Monetary'], 5, labels = [5, 4, 3, 2, 1]) #1花很多錢
 
 rfm['RFM_Score'] = rfm['Recency_Score'].astype(str) + rfm['Frequency_Score'].astype(str)
 rfm.head()
