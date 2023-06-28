@@ -14,20 +14,36 @@ df.dtypes
 #Preprocessing
 df.isnull().sum()
 
+duplicated_data = df[df.duplicated(keep = False)]
+print(duplicated_data)
+df = df.drop_duplicates()
+
+#類別轉換 / 標準化#
 from sklearn.preprocessing import LabelEncoder
-#sex#
+from sklearn.preprocessing import StandardScaler
+
 encoder = LabelEncoder()
+#sex
 df.sex = encoder.fit_transform(df.sex)
-#smoker#
+#smoker
 df.smoker = encoder.fit_transform(df.smoker)
-#region#
+#region
 df.region = encoder.fit_transform(df.region)
+
+scaler = StandardScaler()
+#age & bmi
+selected_feature = ['age', 'bmi']
+selected_df = df[selected_feature]
+selected_scaler = scaler.fit_transform(selected_df)
+df[selected_feature] = selected_scaler
 
 print(df.sex.value_counts())
 print(df.children.value_counts())
 print(df.smoker.value_counts())
 print(df.region.value_counts())
+df.head()
 
+#觀察charges#
 sns.set(style = "whitegrid") # 白色網格背景
 sns.displot(df['charges'], kde = True)
 plt.title('Distribution of charges')
@@ -38,9 +54,47 @@ sns.displot(np.log10(df.charges), kde = True)
 df_corr = df.corr()
 plt.figure(figsize = (8,8))
 sns.heatmap(df_corr, annot=True, cmap = 'Greens')
-#smoker有最高的相關性，其次為年紀、bmi#
+#smoker有最高的相關性，其次為age、bmi#
 #smoker對charges影響#
+plt.title("charges for smoker")
 sns.boxplot(data = df, x = 'charges', y = 'smoker', orient="h")
 plt.show()
+#smoker & age對charges之影響#
+sns.lmplot(data = df, x = 'age', y = 'charges', hue = 'smoker')
+plt.show()
+#smoker & bmi對charges之影響#
+sns.lmplot(data = df, x = 'bmi', y = 'charges', hue = 'smoker')
+plt.show()
 
+#Regression
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score,mean_squared_error
+from sklearn.ensemble import RandomForestRegressor
 
+x = df.drop(['charges'], axis = 1)
+y = df['charges']
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 0)
+lr_train = LinearRegression().fit(x_train, y_train)
+
+y_train_pred = lr_train.predict(x_train)
+y_test_pred = lr_train.predict(x_test)
+print('R_square:', lr_train.score(x_test, y_test))
+
+#PolynomialFeatures
+#各因子之間可能存在交互作用，因此使用多項式特徵訓練模型#
+from sklearn.preprocessing import PolynomialFeatures
+
+X = df.drop(['charges'], axis = 1)
+Y = df['charges']
+
+binomial = PolynomialFeatures(degree = 2)
+X_binomial = binomial.fit_transform(X)
+
+X_train, X_test, Y_train, Y_test = train_test_split(X_binomial, Y, random_state = 0)
+Lr_train = LinearRegression().fit(X_train, Y_train)
+
+Y_train_pred = Lr_train.predict(X_train)
+Y_test_pred = Lr_train.predict(X_test)
+print('R_square:', Lr_train.score(X_test, Y_test))
