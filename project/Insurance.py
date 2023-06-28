@@ -80,7 +80,8 @@ lr_train = LinearRegression().fit(x_train, y_train)
 
 y_train_pred = lr_train.predict(x_train)
 y_test_pred = lr_train.predict(x_test)
-print('R_square:', lr_train.score(x_test, y_test))
+print('R2_linear_train:', lr_train.score(x_train, y_train))
+print('R2_linear_test:', lr_train.score(x_test, y_test))
 
 #PolynomialFeatures
 #各因子之間可能存在交互作用，因此使用多項式特徵訓練模型#
@@ -97,4 +98,45 @@ Lr_train = LinearRegression().fit(X_train, Y_train)
 
 Y_train_pred = Lr_train.predict(X_train)
 Y_test_pred = Lr_train.predict(X_test)
-print('R_square:', Lr_train.score(X_test, Y_test))
+print('R2__bino_train:', Lr_train.score(X_train, Y_train))
+print('R2__bino_test:', Lr_train.score(X_test, Y_test))
+
+# RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor
+
+forest = RandomForestRegressor(n_estimators = 100,
+                              criterion = 'squared_error',
+                              random_state = 1,
+                              n_jobs = -1)
+forest.fit(x_train,y_train)
+forest_train_pred = forest.predict(x_train)
+forest_test_pred = forest.predict(x_test)
+
+print('R2_forest_train:',r2_score(y_train,forest_train_pred))
+print('R2_forest_test:',r2_score(y_test,forest_test_pred))
+
+
+#predict-actual plot
+plt.scatter(forest_train_pred, forest_train_pred - y_train, c = 'black', marker = 'o', s = 35, alpha = 0.5, label = 'train_data')
+plt.scatter(forest_test_pred, forest_test_pred - y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
+plt.xlabel('Predicted values')
+plt.ylabel('Tailings')
+
+#importance
+print('Feature importance ranking')
+
+importances = forest.feature_importances_
+std = np.std([tree.feature_importances_ for tree in forest.estimators_],axis=0)
+indices = np.argsort(importances)[::-1]
+variables = ['age', 'sex', 'bmi', 'children','smoker', 'region']
+importance_list = []
+for f in range(x.shape[1]):
+    variable = variables[indices[f]]
+    importance_list.append(variable)
+    print("%d.%s(%f)" % (f + 1, variable, importances[indices[f]]))
+
+# Plot the feature importances of the forest
+plt.figure()
+plt.title("Feature importances")
+plt.bar(importance_list, importances[indices],
+       color="y", yerr=std[indices], align="center")
