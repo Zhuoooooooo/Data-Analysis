@@ -55,6 +55,7 @@ df_corr = df.corr()
 plt.figure(figsize = (8,8))
 sns.heatmap(df_corr, annot=True, cmap = 'Greens')
 #smoker有最高的相關性，其次為age、bmi#
+
 #smoker對charges影響#
 plt.title("charges for smoker")
 sns.boxplot(data = df, x = 'charges', y = 'smoker', orient="h")
@@ -89,6 +90,7 @@ plt.scatter(y_train_pred, y_train_pred - y_train, c = 'black', marker = 'o', s =
 plt.scatter(y_test_pred, y_test_pred - y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
 plt.xlabel('Predicted values')
 plt.ylabel('Residual')
+plt.hlines(0, 0, 45000, color = 'blue')
 
 
 #PolynomialFeatures
@@ -114,7 +116,7 @@ plt.scatter(Y_train_pred, Y_train_pred - Y_train, c = 'black', marker = 'o', s =
 plt.scatter(Y_test_pred, Y_test_pred - Y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
 plt.xlabel('Predicted values')
 plt.ylabel('Residual')
-
+plt.hlines(0, 0, 45000, color = 'blue')
 
 # RandomForestRegressor
 from sklearn.ensemble import RandomForestRegressor
@@ -135,7 +137,8 @@ print('R2_forest_test:',r2_score(y_test,forest_test_pred))
 plt.scatter(forest_train_pred, forest_train_pred - y_train, c = 'black', marker = 'o', s = 35, alpha = 0.5, label = 'train_data')
 plt.scatter(forest_test_pred, forest_test_pred - y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
 plt.xlabel('Predicted values')
-plt.ylabel('Tailings')
+plt.ylabel('Residual')
+plt.hlines(0, 0, 45000, color = 'blue')
 
 #importance
 print('Feature importance ranking')
