@@ -75,6 +75,7 @@ from sklearn.ensemble import RandomForestRegressor
 x = df.drop(['charges'], axis = 1)
 y = df['charges']
 
+#區分測試資料、訓練資料#
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state = 0)
 lr_train = LinearRegression().fit(x_train, y_train)
 
@@ -82,6 +83,12 @@ y_train_pred = lr_train.predict(x_train)
 y_test_pred = lr_train.predict(x_test)
 print('R2_linear_train:', lr_train.score(x_train, y_train))
 print('R2_linear_test:', lr_train.score(x_test, y_test))
+
+plt.scatter(y_train_pred, y_train_pred - y_train, c = 'black', marker = 'o', s = 35, alpha = 0.5, label = 'train_data')
+plt.scatter(y_test_pred, y_test_pred - y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
+plt.xlabel('Predicted values')
+plt.ylabel('Residual')
+
 
 #PolynomialFeatures
 #各因子之間可能存在交互作用，因此使用多項式特徵訓練模型#
@@ -100,6 +107,12 @@ Y_train_pred = Lr_train.predict(X_train)
 Y_test_pred = Lr_train.predict(X_test)
 print('R2__bino_train:', Lr_train.score(X_train, Y_train))
 print('R2__bino_test:', Lr_train.score(X_test, Y_test))
+
+plt.scatter(Y_train_pred, Y_train_pred - Y_train, c = 'black', marker = 'o', s = 35, alpha = 0.5, label = 'train_data')
+plt.scatter(Y_test_pred, Y_test_pred - Y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
+plt.xlabel('Predicted values')
+plt.ylabel('Residual')
+
 
 # RandomForestRegressor
 from sklearn.ensemble import RandomForestRegressor
@@ -137,6 +150,7 @@ for f in range(x.shape[1]):
 
 # Plot the feature importances of the forest
 plt.figure()
-plt.title("Feature importances")
+plt.title("Feature importance")
 plt.bar(importance_list, importances[indices],
-       color="y", yerr=std[indices], align="center")
+       color="r", yerr=std[indices], align="center")
+plt.ylabel('Importance')
