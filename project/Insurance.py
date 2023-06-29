@@ -84,6 +84,7 @@ y_test_pred = lr_train.predict(x_test)
 print('R2_linear_train:', lr_train.score(x_train, y_train))
 print('R2_linear_test:', lr_train.score(x_test, y_test))
 
+#predict-actual plot
 plt.scatter(y_train_pred, y_train_pred - y_train, c = 'black', marker = 'o', s = 35, alpha = 0.5, label = 'train_data')
 plt.scatter(y_test_pred, y_test_pred - y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
 plt.xlabel('Predicted values')
@@ -108,6 +109,7 @@ Y_test_pred = Lr_train.predict(X_test)
 print('R2__bino_train:', Lr_train.score(X_train, Y_train))
 print('R2__bino_test:', Lr_train.score(X_test, Y_test))
 
+#predict-actual plot
 plt.scatter(Y_train_pred, Y_train_pred - Y_train, c = 'black', marker = 'o', s = 35, alpha = 0.5, label = 'train_data')
 plt.scatter(Y_test_pred, Y_test_pred - Y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
 plt.xlabel('Predicted values')
