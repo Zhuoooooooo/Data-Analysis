@@ -66,6 +66,7 @@ odd = df_cleaned[df_cleaned['Age'] >= 95]
 odd.head()
 df_final = df_cleaned[df_cleaned['Age'] <= 95]
 
+#重置DATAFRAME編號#
 df_final = df_final.reset_index(drop=True)
 df_final.shape
 
