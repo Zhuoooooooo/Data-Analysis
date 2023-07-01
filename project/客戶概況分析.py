@@ -69,7 +69,7 @@ df_final = df_cleaned[df_cleaned['Age'] <= 95]
 df_final = df_final.reset_index(drop=True)
 df_final.shape
 
-#客戶概況##
+#客戶概況#
 print('Average Order:', df_final['Total_Order'].sum())
 print('Average Spent:', df_final['Total_Spent'].sum())
 print('Average Age:', (df_final['Age'].sum()/df_final.shape[0]))
