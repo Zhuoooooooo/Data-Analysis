@@ -91,6 +91,7 @@ plt.scatter(y_test_pred, y_test_pred - y_test, c = 'red', marker = 'o', s = 35, 
 plt.xlabel('Predicted values')
 plt.ylabel('Residual')
 plt.hlines(0, 0, 45000, color = 'blue')
+plt.legend(loc='upper left', bbox_to_anchor=(0, -0.07))
 
 
 #PolynomialFeatures
@@ -116,7 +117,8 @@ plt.scatter(Y_train_pred, Y_train_pred - Y_train, c = 'black', marker = 'o', s =
 plt.scatter(Y_test_pred, Y_test_pred - Y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
 plt.xlabel('Predicted values')
 plt.ylabel('Residual')
-plt.hlines(0, 0, 45000, color = 'blue')
+plt.hlines(0, 0, 60000, color = 'blue')
+plt.legend(loc='upper left', bbox_to_anchor=(0, -0.07))
 
 # RandomForestRegressor
 from sklearn.ensemble import RandomForestRegressor
@@ -138,7 +140,8 @@ plt.scatter(forest_train_pred, forest_train_pred - y_train, c = 'black', marker 
 plt.scatter(forest_test_pred, forest_test_pred - y_test, c = 'red', marker = 'o', s = 35, alpha = 0.5, label = 'test_data')
 plt.xlabel('Predicted values')
 plt.ylabel('Residual')
-plt.hlines(0, 0, 45000, color = 'blue')
+plt.hlines(0, 0, 60000, color = 'blue')
+plt.legend(loc='upper left', bbox_to_anchor=(0, -0.07))
 
 #importance
 print('Feature importance ranking')
