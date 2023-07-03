@@ -16,7 +16,7 @@ from sklearn.linear_model import LinearRegression
 * Independent features
 * Normally distributed error term
 <br>
-### PolynomialFeatures
+### PolynomialFeatures 
 ```py
 from sklearn.preprocessing import PolynomialFeatures
 ```
