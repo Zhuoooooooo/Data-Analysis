@@ -1,22 +1,22 @@
 > # Medical Insurance Prediction
-This project aim to establish a simple prediction model for medical insurance via mechine learning.<br>
+> This project aim to establish a simple prediction model for medical insurance via mechine learning.<br>
 <br>
->> ## Model choosing
-The models used in this project include the following:<br>
-* [LinearRegression] (https://www.ibm.com/topics/linear-regression)
-* [PolynomialFeatures] (https://machinelearningmastery.com/polynomial-features-transforms-for-machine-learning/)
-* [RandomForest] (https://www.ibm.com/topics/random-forest)
->>> ### LinearRegression 
-```py
+ ## Model choosing
+ The models used in this project include the following:<br>
+ * [LinearRegression] (https://www.ibm.com/topics/linear-regression)
+ * [PolynomialFeatures] (https://machinelearningmastery.com/polynomial-features-transforms-for-machine-learning/)
+ * [RandomForest] (https://www.ibm.com/topics/random-forest)
+ ### LinearRegression 
+ ```py
 from sklearn.linear_model import LinearRegression
 ```
-`Linear regression` is suitable for data with:<br>
-* Continuous target variable
-* Linear relationship
-* Independent features
-* Normally distributed error term
+ `Linear regression` is suitable for data with:<br>
+ * Continuous target variable
+ * Linear relationship
+ * Independent features
+ * Normally distributed error term
 <br>
->>> ### PolynomialFeatures
+### PolynomialFeatures
 ```py
 from sklearn.preprocessing import PolynomialFeatures
 ```
@@ -25,7 +25,7 @@ from sklearn.preprocessing import PolynomialFeatures
 * Higher-order relationships
 * Non-linear relationships
 <br>
->>> ### RandomForest
+### RandomForest
 ```py
 from sklearn.ensemble import RandomForestRegressor
 ```
