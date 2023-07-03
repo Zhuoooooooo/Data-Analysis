@@ -1,2 +1,3 @@
 # Data-Analysis
-side project
+THis repository is for my side projects.<br>
+Record of My Learning Journey in Data Processing
