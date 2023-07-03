@@ -1,14 +1,39 @@
-# Medical Insurance Prediction
+> # Medical Insurance Prediction
 This project aim to establish a simple prediction model for medical insurance via mechine learning.<br>
 <br>
-## Model choosing
+>> ## Model choosing
 The models used in this project include the following:<br>
-* LinearRegression
-* PolynomialFeatures
-* RandomForest
-### LinearRegression
+* [LinearRegression] (https://www.ibm.com/topics/linear-regression)
+* [PolynomialFeatures] (https://machinelearningmastery.com/polynomial-features-transforms-for-machine-learning/)
+* [RandomForest] (https://www.ibm.com/topics/random-forest)
+>>> ### LinearRegression 
 ```py
 from sklearn.linear_model import LinearRegression
 ```
-Linear regression is suitable for data with:<be>
-* Continuous target variable :
+`Linear regression` is suitable for data with:<br>
+* Continuous target variable
+* Linear relationship
+* Independent features
+* Normally distributed error term
+<br>
+>>> ### PolynomialFeatures
+```py
+from sklearn.preprocessing import PolynomialFeatures
+```
+`PolynomialFeatures` is suitable for data with:<br>
+* Interaction effects
+* Higher-order relationships
+* Non-linear relationships
+<br>
+>>> ### RandomForest
+```py
+from sklearn.ensemble import RandomForestRegressor
+```
+`RandomForest` is suitable for data with:<be>
+* Outliers and missing values
+* High-dimensional data
+* Non-linear relationships <br>
+And `RandomForest` Model has following funtion:<br>
+*Feature importance*: Provides a measure of feature importance, which can help identify the most influential features for the target variable.<br>
+*Ensemble learning*: Combines multiple decision trees to make predictions.<br>
+
